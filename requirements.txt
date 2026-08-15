@@ -1,0 +1,50 @@
+# LangChain Core
+langchain
+langchain-core
+
+# OpenAI Integration
+langchain-openai
+openai
+
+# Anthropic Integration
+langchain-anthropic
+
+# Google Gemini (PaLM) Integration
+langchain-google-genai
+google-generativeai
+
+# Hugging Face Integration
+langchain-huggingface
+transformers
+huggingface-hub
+
+# Environment Variable Management
+python-dotenv
+
+# Machine Learning Utilities
+numpy
+scikit-learn
+
+
+
+pip install sentence-transformers
+pip install langchain-google-genai python-dotenv
+pip install langchain-openai python-dotenv
+pip install torch torchvision torchaudio
+
+pip install streamlit
+pip install pydantic
+pip install grandalf
+pip install langchain-community
+
+pip install pypdf
+pip install lxml
+pip install beautifulsoup4
+
+pip install -U langchain
+pip install -U langchain-community
+pip install -U langchain-text-splitters
+pip install -U pypdf
+
+pip install langchain-google-genai langchain-chroma
+

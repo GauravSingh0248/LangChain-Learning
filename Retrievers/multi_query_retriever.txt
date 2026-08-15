@@ -1,0 +1,44 @@
+A MultiQuery Retriever is a retrieval technique used in RAG (Retrieval-Augmented Generation) to improve document retrieval by generating multiple semantically different versions of the user's query and retrieving documents for each version. The results are then merged and deduplicated.
+
+Instead of relying on a single embedding of the user's question, the retriever asks an LLM to rewrite the query from different perspectives.
+
+Why use MultiQuery Retriever?
+
+Suppose a user asks:
+
+"How can I reduce cloud costs?"
+
+A vector search on this exact query might miss documents that talk about:
+
+"Cloud cost optimization"
+"AWS billing reduction"
+"Infrastructure rightsizing"
+"Reserved Instances"
+"Compute cost savings"
+
+A MultiQuery Retriever generates variations such as:
+
+How do I optimize cloud spending?
+Best practices for reducing AWS costs.
+Techniques for cloud infrastructure cost optimization.
+Methods to minimize cloud billing.
+
+Each variation is searched independently, increasing recall.
+
+
+            User Query
+                 │
+                 ▼
+        LLM generates N queries
+                 │
+      ┌──────────┼──────────┐
+      ▼          ▼          ▼
+ Vector Search Vector Search Vector Search
+      │          │          │
+      └──────Merge + Deduplicate──────┘
+                 │
+                 ▼
+          Retrieved Documents
+                 │
+                 ▼
+             LLM Answer

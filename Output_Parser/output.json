@@ -1,0 +1,28 @@
+{
+    "name": "Black Hole",
+    "definition": "A region in space where the gravitational pull is so strong that nothing, including light, can escape.",
+    "size": {
+        "diameter": "typically between 10 and 30 kilometers (6 and 19 miles)",
+        "mass": "can be millions or even billions of times more massive than the sun"
+    },
+    "types": [
+        "Stellar Black Hole (formed from the collapse of a massive star)",
+        "Supermassive Black Hole (found at the center of galaxies)",
+        "Intermediate-Mass Black Hole (with masses that fall between stellar and supermassive black holes)"
+    ],
+    "properties": {
+        "gravity": "so strong that it warps space-time",
+        "event_horizon": "the point of no return, where the gravity is so strong that anything that crosses it will be trapped",
+        "temperature": "increases as matter falls towards the black hole",
+        "emission": "can emit radiation, including X-rays and gamma rays, due to the hot accretion disk surrounding it"
+    },
+    "history": {
+        "discovery": "first proposed by John Michell in 1783",
+        "modernUnderstanding": "developed by David Finkelstein in 1958 and Roger Penrose in 1965"
+    },
+    "interesting_facts": {
+        "singularity": "the center of a black hole is thought to be a point of infinite density and zero volume",
+        "cosmic_ray": "some black holes are thought to be responsible for the origin of cosmic rays",
+        "star_suck": "supermassive black holes can affect the orbits of stars and even entire galaxies"
+    }
+}

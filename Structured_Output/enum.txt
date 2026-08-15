@@ -1,0 +1,9 @@
+An Enum (Enumeration) is a way to define a fixed set of allowed values. Instead of allowing any value, you restrict it to a predefined list.
+
+For example, imagine a traffic light.
+
+Possible values are only:
+
+Red
+Yellow
+Green

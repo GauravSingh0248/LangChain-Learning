@@ -1,0 +1,156 @@
+# Maximum Marginal Relevance (MMR) – Notes
+
+## 1. Definition
+- Maximum Marginal Relevance (MMR) is a retrieval strategy used in RAG.
+- It retrieves documents that are:
+  - Relevant to the user's query.
+  - Diverse (non-redundant) from each other.
+
+---
+
+## 2. Why MMR?
+- Similarity Search may return multiple documents containing almost the same information.
+- MMR reduces duplicate results and retrieves documents covering different aspects of the query.
+- This provides better context to the LLM and improves answer quality.
+
+---
+
+## 3. Similarity Search vs MMR
+
+### Similarity Search
+- Returns the most similar documents.
+- May retrieve duplicate or overlapping chunks.
+
+Example:
+1. LangChain Introduction
+2. LangChain Overview
+3. LangChain Basics
+
+### Maximum Marginal Relevance (MMR)
+- Returns relevant but diverse documents.
+
+Example:
+1. LangChain Introduction
+2. LangChain Memory
+3. LangChain Agents
+
+---
+
+## 4. How MMR Works
+
+MMR selects documents based on:
+
+- High similarity to the query.
+- Low similarity to already selected documents.
+
+Formula (Concept):
+
+MMR Score = Relevance to Query − Redundancy with Selected Documents
+
+---
+
+## 5. Advantages
+
+- Reduces duplicate information.
+- Increases diversity of retrieved documents.
+- Provides richer context to the LLM.
+- Improves answer quality in RAG systems.
+
+---
+
+## 6. LangChain Implementation
+
+### Similarity Search
+
+```python
+docs = vector_store.similarity_search(
+    query="What is LangChain?",
+    k=4
+)
+```
+
+### MMR Search
+
+```python
+docs = vector_store.max_marginal_relevance_search(
+    query="What is LangChain?",
+    k=4
+)
+```
+
+---
+
+## 7. Important Parameters
+
+### k
+- Number of documents returned.
+
+Example:
+
+```python
+k=4
+```
+
+Returns 4 documents.
+
+---
+
+### fetch_k
+- Number of candidate documents fetched before applying MMR.
+
+Example:
+
+```python
+fetch_k=20
+```
+
+Process:
+
+Top 20 Similar Documents
+        ↓
+     Apply MMR
+        ↓
+ Return Best 4 Documents
+
+A larger `fetch_k` gives MMR more choices for selecting diverse documents.
+
+---
+
+### lambda_mult
+
+Controls the balance between relevance and diversity.
+
+- `lambda_mult = 1.0` → Only relevance (acts like similarity search)
+- `lambda_mult = 0.5` → Balanced relevance and diversity (recommended)
+- `lambda_mult = 0.0` → Maximum diversity
+
+Example:
+
+```python
+docs = vector_store.max_marginal_relevance_search(
+    query="What is LangChain?",
+    k=4,
+    fetch_k=20,
+    lambda_mult=0.5
+)
+```
+
+---
+
+## 8. When to Use MMR
+
+Use MMR when:
+- Building RAG applications.
+- Documents contain overlapping chunks.
+- Better context diversity is required.
+- You want to avoid duplicate retrievals.
+
+Use Similarity Search when:
+- Only the most relevant documents are needed.
+- The dataset has very little redundancy.
+
+---
+
+## Interview Definition
+
+**Maximum Marginal Relevance (MMR)** is a retrieval strategy used in RAG that retrieves documents that are both **highly relevant to the query** and **diverse from one another**. It reduces redundancy by considering both the similarity to the query and the similarity to already selected documents, resulting in richer context and better responses from the LLM.

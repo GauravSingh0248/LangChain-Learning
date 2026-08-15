@@ -1,0 +1,97 @@
+Text Splitters in LangChain
+
+A Text Splitter is used to break large documents into smaller chunks before passing them to an LLM or storing them in a vector database.
+
+Why is this necessary?
+
+LLMs have a context window (token limit).
+Smaller chunks improve retrieval quality in RAG applications.
+Embeddings work better on semantically meaningful chunks.
+
+
+Document
+    │
+    ▼
+Text Splitter
+    │
+    ▼
+Small Chunks
+    │
+    ▼
+Embeddings
+    │
+    ▼
+Vector Database
+
+Types of Text Splitters
+
+1. CharacterTextSplitter
+
+Splits text based on a separator such as \n or spaces.
+
+from langchain_text_splitters import CharacterTextSplitter
+
+text_splitter = CharacterTextSplitter(
+    separator="\n",
+    chunk_size=100,
+    chunk_overlap=20
+)
+
+chunks = text_splitter.split_text(text)
+
+---------------------------------------------------------------------------------------------------------------
+
+
+
+2. RecursiveCharacterTextSplitter ⭐ (Most Common)
+
+This is the default and most recommended splitter.
+
+Instead of splitting only by one separator, it tries multiple separators in order.
+
+Typical order:
+
+Paragraph (\n\n)
+      ↓
+Line (\n)
+      ↓
+Space (" ")
+      ↓
+Character
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+splitter = RecursiveCharacterTextSplitter(
+    chunk_size=500,
+    chunk_overlap=50
+)
+
+docs = splitter.split_documents(documents)
+Example
+
+Input
+
+Paragraph 1
+
+Paragraph 2
+
+Paragraph 3
+
+It first tries to keep entire paragraphs together.
+
+If a paragraph is too long:
+
+Paragraph
+    ↓
+Lines
+    ↓
+Words
+    ↓
+Characters
+Best for
+PDFs
+Web pages
+Articles
+Books
+RAG applications
+
+This is the splitter you'll use 90% of the time.

@@ -1,0 +1,27 @@
+Contextual Compression Retriever
+
+Contextual Compression Retriever is a retrieval technique in RAG that retrieves documents first and then removes the irrelevant parts of those documents, keeping only the information relevant to the user's query.
+
+Normal Retriever:
+User Query
+    ↓
+Vector Retriever
+    ↓
+Retrieve Documents
+    ↓
+Send COMPLETE documents to LLM
+
+
+
+Contextual Compression:
+User Query
+    ↓
+Vector Retriever
+    ↓
+Retrieve Documents
+    ↓
+Compression / Filtering
+    ↓
+Keep only relevant information
+    ↓
+Send to LLM
