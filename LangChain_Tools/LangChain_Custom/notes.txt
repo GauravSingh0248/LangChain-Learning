@@ -1,0 +1,242 @@
+print(create_profile.args_schema.model_json_schema())
+        important part
+
+
+1. @tool decorator — easiest ⭐
+
+This is the method we have already used.
+
+from langchain_core.tools import tool
+
+
+@tool
+def add(a: int, b: int) -> int:
+    """Add two numbers."""
+    return a + b
+
+Now add becomes a LangChain tool.
+
+add.invoke({
+    "a": 10,
+    "b": 20
+})
+
+Output:
+
+30
+What happens internally?
+Python function
+      ↓
+   @tool
+      ↓
+StructuredTool
+      ↓
+Input schema
+      ↓
+LLM can call it
+When should you use it?
+
+Most of the time when creating simple custom tools.
+
+It's:
+
+Short
+Easy to understand
+Easy to maintain
+Automatically creates the input schema from type hints
+2. StructuredTool + Pydantic
+
+This gives you more control over the input schema.
+
+Instead of letting LangChain infer everything from the function, you explicitly define the schema using Pydantic.
+
+Step 1 — Create a Pydantic schema
+from pydantic import BaseModel, Field
+
+
+class CalculatorInput(BaseModel):
+    a: int = Field(description="First number")
+    b: int = Field(description="Second number")
+
+Now we have:
+
+CalculatorInput
+│
+├── a → int
+└── b → int
+Step 2 — Create the function
+def multiply(a: int, b: int) -> int:
+    return a * b
+Step 3 — Create the StructuredTool
+from langchain_core.tools import StructuredTool
+
+
+multiply_tool = StructuredTool.from_function(
+    func=multiply,
+    name="multiply",
+    description="Multiply two numbers.",
+    args_schema=CalculatorInput
+)
+
+Then:
+
+result = multiply_tool.invoke({
+    "a": 10,
+    "b": 20
+})
+
+
+print(result)
+
+Output:
+
+200
+Why use Pydantic?
+
+Imagine a more complicated tool:
+
+class StudentInput(BaseModel):
+    name: str = Field(description="Student's name")
+    age: int = Field(description="Student's age")
+    marks: list[float] = Field(description="Student's marks")
+
+Now you have precise control over:
+
+Types
+Descriptions
+Required fields
+Default values
+Validation
+More complex input structures
+
+For example:
+
+class StudentInput(BaseModel):
+    name: str
+    age: int = Field(gt=0)
+    marks: list[float]
+
+age must now be greater than 0.
+
+This becomes especially useful when tools have complex inputs.
+
+3. BaseTool class — most control
+
+This is the most advanced approach.
+
+Instead of using a decorator or StructuredTool.from_function(), you create your own Tool class by inheriting from BaseTool.
+
+Conceptually:
+
+BaseTool
+   ↑
+Your custom tool
+
+Example:
+
+from langchain_core.tools import BaseTool
+
+
+class MultiplyTool(BaseTool):
+    name: str = "multiply"
+    description: str = "Multiply two numbers."
+
+
+    def _run(self, a: int, b: int) -> int:
+        return a * b
+
+Then:
+
+tool = MultiplyTool()
+
+
+result = tool.invoke({
+    "a": 10,
+    "b": 20
+})
+
+
+print(result)
+Why would we use BaseTool?
+
+Because now you can create a full custom tool class.
+
+For example, imagine:
+
+GitHubTool
+│
+├── authentication
+├── API client
+├── validation
+├── error handling
+├── synchronous execution
+├── asynchronous execution
+└── custom behavior
+
+A simple @tool function can become difficult to manage for something this complicated.
+
+A class gives you much more control.
+
+The three approaches compared
+Method	Difficulty	Control	Best for
+@tool	⭐	Low	Simple tools
+StructuredTool + Pydantic	⭐⭐	Medium/High	Complex structured inputs
+BaseTool	⭐⭐⭐⭐	Very high	Advanced/custom tool behavior
+
+Think of them like this:
+
+                 Creating LangChain Tools
+                          │
+          ┌───────────────┼────────────────┐
+          ↓               ↓                ↓
+       @tool       StructuredTool       BaseTool
+          │               │                │
+       Simple         Structured         Advanced
+          │             inputs           control
+          │               │                │
+          └───────────────┴────────────────┘
+                          ↓
+                   LLM Tool Calling
+What I recommend you learn
+
+Since you're learning LangChain from the beginning, don't jump straight to BaseTool.
+
+Learn in this order:
+
+Level 1 — @tool
+@tool
+def add(a: int, b: int):
+    ...
+
+Understand:
+
+Type hints
+Docstrings
+Tool schema
+.invoke()
+Level 2 — StructuredTool + Pydantic
+
+Understand:
+
+Pydantic Model
+      ↓
+Input validation
+      ↓
+StructuredTool
+      ↓
+LLM
+Level 3 — BaseTool
+
+Understand:
+
+BaseTool
+   ↓
+Custom class
+   ↓
+_run()
+   ↓
+_arun()
+   ↓
+Custom tool behavior
+
+For now, your next practical exercise should be StructuredTool + Pydantic, because it will show you why we need schemas beyond what @tool automatically gives us.
